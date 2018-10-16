@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+    <div>
+        <a href="{% url 'home' %}">
+            <h3>HomePage</h3></a>
+
+
+    </div>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'logout' %}?from={{ request.get_full_path }}">Logout</a>
+    <a href="{% url 'user_info' %}">user information</a>
+    {% if user.is_staff or user.is_superuser %}
+    <a href="{% url 'admin:index' %}">manage</a>
+    {% endif %}
+{% else %}
+
+
+
+<!--提交表单 -->
+
+Not login yet, please log in/register
+
+<!--这个?from可以获取进来前的页面位置-->
+
+<a href="{% url 'login' %}?from={{ request.get_full_path }}">Login</a>
+<span> or </span>
+<a href="{% url 'register' %}?from={{ request.get_full_path }}">Register</a>
+
+{% endif %}
+
+
+    {% block content %}{% endblock %}
+
+    {% block script %}{% endblock %}
+</body>
+</html>

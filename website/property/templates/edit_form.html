@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content = "width = device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" href="../static/images/favicon.png">
+
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Hind:400,300,500,600%7cMontserrat:400,700' rel='stylesheet' type='text/css'>
+
+   <!-- CSS LIBRARY -->
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/font-lotusicon.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/magnific-popup.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/settings.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/lib/bootstrap-select.min.css">
+
+
+    <!-- MAIN STYLE -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+
+</head>
+
+
+<!--[if IE 7]> <body class="ie7 lt-ie8 lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 8]> <body class="ie8 lt-ie9 lt-ie10"> <![endif]-->
+<!--[if IE 9]> <body class="ie9 lt-ie10"> <![endif]-->
+
+
+<body>
+<!-- PAGE WRAP -->
+<div id="page-wrap">
+	<!-- HEADER -->
+    <header id="header">
+        <!-- HEADER TOP -->
+        <div class="header_top">
+            <div class="container">
+                <div class="header_left float-left">
+                    <span><i class="lotus-icon-location"></i> UNSW, Sydney, Australia</span>
+                    <span><i class="lotus-icon-phone"></i> 0452088597 </span>
+                </div>
+                <div class="header_right float-right">
+                    <span class="login-register">
+						{% if user.is_authenticated %}
+						<a href="{% url 'logout' %}?from={{ request.get_full_path }}">Logout</a>
+						<a href="{% url 'user_info' %}">user information</a>
+						{% if user.is_staff or user.is_superuser %}
+						<a href="{% url 'admin:index' %}">manage</a>
+						{% endif %}
+						{% else %}
+                        <a href="{% url 'login' %}?from={{ request.get_full_path }}">Login</a>
+                        <a href="{% url 'register' %}?from={{ request.get_full_path }}">Register</a>
+						{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- END / HEADER TOP -->
+        <!-- HEADER LOGO & MENU -->
+        <div class="header_content" id="header_content">
+            <div class="container">
+                <!-- HEADER MENU -->
+                <nav class="header_menu">
+                    <ul class="menu">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+
+                        <li><a href="{% url 'about' %}">About</a></li>
+
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </nav>
+                <!-- END / HEADER MENU -->
+
+                <!-- MENU BAR -->
+                <span class="menu-bars">
+                    <span></span>
+                </span>
+                <!-- END / MENU BAR -->
+            </div>
+        </div>
+        <!-- END / HEADER LOGO & MENU -->
+    </header>
+    <!-- END / HEADER -->
+    <!-- SUB BANNER -->
+    <section class="section-sub-banner bg-9">
+        <div class="sub-banner">
+            <div class="container">
+                <div class="text text-center">
+                    <h2>New Accommodation Post</h2>
+                    <p>Please fill with the detail of your Accommodation</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    <!-- END / SUB BANNER -->
+
+    <!-- CONTACT -->
+    <section class="section-contact">
+        <div class="container">
+            <div class="contact">
+                <div class="row">
+					<form action="{% url 'edit' res.id %}" method="get">
+						{% csrf_token %}
+						<div class="col-md-2 col-lg-2">
+							State:
+							<br>
+							<input size = 5 type="text" name="state" value="{{ res.state }}"><br>
+							Suburb<br>
+							<input size= 5 type="text" name="suburb" value="{{ res.suburb }}"><br>
+							Street Number:<br> <input size = 5 type="text" name="st_num" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" value="{{ res.st_number }}"><br>
+							Street Name:<br><input size = 5 type="text" name="st_name" value="{{ res.st_name }}"><br>
+						</div>
+						<div class="col-md-2 col-lg-2">
+							tenantNum:<br><input size= 5 type="text" name="person" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" value="{{ res.tenant_num }}"><br>
+							Price:<br><input size=5 type="text" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" name="price" value="{{ res.price }}"><br>
+						</div>
+						<div class="col-md-2 col-lg-4">
+							House Type:<br>
+							{% if res.house_type == 'apartment' %}
+								<input type="radio" name="house_type" value="apartment" checked>Apartment
+							{% else %}
+								<input type="radio" name="house_type" value="apartment">Apartment
+							{% endif %}
+							{% if res.house_type == 'house' %}
+								<input type="radio" name="house_type" value="house" checked>House
+							{% else %}
+								<input type="radio" name="house_type" value="house">House
+							{% endif %}
+							{% if res.house_type == 'unit' %}
+								<input type="radio" name="house_type" value="unit" checked>Unit
+							{% else %}
+								<input type="radio" name="house_type" value="unit">Unit
+							{% endif %}
+							{% if res.house_type == 'townhouse' %}
+								<input type="radio" name="house_type" value="townhouse" checked>Townhouse
+							{% else %}
+								<input type="radio" name="house_type" value="townhouse">Townhouse
+							{% endif %}
+							{% if res.house_type == 'terrace' %}
+								<input type="radio" name="house_type" value="terrace" checked>Terrace<br>
+							{% else %}
+								<input type="radio" name="house_type" value="terrace">Terrace<br>
+							{% endif %}
+							{% if res.pet == 1 %}
+							Pet: <input type="radio" name="pet" value="1" checked>Yes
+							<input type="radio" name="pet" value="0">No<br>
+							{% else %}
+							Pet: <input type="radio" name="pet" value="1">Yes
+							<input type="radio" name="pet" value="0" checked>No<br>
+							{% endif %}
+							{% if res.wifi == 1 %}
+							Wifi: <input type="radio" name="wifi" value="1" checked>Yes
+							<input type="radio" name="wifi" value="0">No<br>
+							{% else %}
+							Wifi: <input type="radio" name="wifi" value="1">Yes
+							<input type="radio" name="wifi" value="0" checked>No<br>
+							{% endif %}
+							{% if res.kitchen == 1 %}
+							Kitchen: <input type="radio" name="kitchen" value="1" checked>Yes
+							<input type="radio" name="kitchen" value="0">No<br>
+							{% else %}
+							Kitchen: <input type="radio" name="kitchen" value="1">Yes
+							<input type="radio" name="kitchen" value="0" checked>No<br>
+							{% endif %}
+							{% if res.laundry == 1 %}
+							Laundry: <input type="radio" name="laundry" value="1" checked>Yes
+							<input type="radio" name="laundry" value="0">No<br>
+							{% else %}
+							Laundry: <input type="radio" name="laundry" value="1">Yes
+							<input type="radio" name="laundry" value="0" checked>No<br>
+							{% endif %}
+							{% if res.park_lot == 1 %}
+							Parking: <input type="radio" name="park_lot" value="1" checked>Yes
+							<input type="radio" name="park_lot" value="0">No<br>
+							{% else %}
+							Parking: <input type="radio" name="park_lot" value="1">Yes
+							<input type="radio" name="park_lot" value="0" checked>No<br>
+							{% endif %}
+						</div>
+
+						<div class="col-md-2 col-lg-2">
+							<div class="contact-form">
+								<div class="col-sm-6">
+									Brief Introduction:<br>
+									<textarea name="brief_intro" cols="50" rows="10">{{ res.brief_intro }}</textarea>
+									<p></p>
+									<input type="submit" class="btn btn-primary" value="Post"><p></p>
+
+									<input type="reset" class="btn btn-primary" value="Reset">
+									<p></p>
+
+									<a href="{% url 'add-img' res.id %}">Add Pictures</a>
+									<a href="{% url 'del-img' res.id %}">Delete Pictures</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+    </section>
+    <!-- END / CONTACT -->
+</div>
+<!-- END / PAGE WRAP -->
+
+
+    <!-- LOAD JQUERY -->
+    <script type="text/javascript" src="../static/js/lib/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/bootstrap-select.js"></script>
+    <!---<script src="http://ditu.google.cn/maps/api/js?v=3.exp&amp;signed_in=true"></script>--->
+    <script type="text/javascript" src="../static/js/lib/isotope.pkgd.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.themepunch.revolution.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.themepunch.tools.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/owl.carousel.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.appear.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.countTo.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.countdown.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.parallax-1.1.3.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.magnific-popup.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/SmoothScroll.js"></script>
+    <!-- validate -->
+    <script type="text/javascript" src="../static/js/lib/jquery.form.min.js"></script>
+    <script type="text/javascript" src="../static/js/lib/jquery.validate.min.js"></script>
+    <!-- Custom jQuery -->
+    <script type="text/javascript" src="../static/js/scripts.js"></script>
+</body>
+</html>
